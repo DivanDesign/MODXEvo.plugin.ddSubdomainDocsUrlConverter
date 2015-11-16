@@ -13,6 +13,7 @@
 
 ## Parameters description
 * $subdomainDocTemplateId {integer} — ID шаблона корневой папки-поддомена.
+* [$alwaysBuildFullUrl='no'] {'yes'|'no'} — Конвертировать все URL в абсолютные.
 
 ## Usage
 Пусть структура документов будет такая:

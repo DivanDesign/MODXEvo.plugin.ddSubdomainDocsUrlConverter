@@ -9,8 +9,9 @@
  * @uses The library modx.ddTools 0.14.2.
  * 
  * @param $subdomainDocTemplateId {integer} — ID шаблона корневой папки-поддомена. @required
+ * @param $alwaysBuildFullUrl {'yes'|'no'} — Конвертировать все URL в абсолютные. Default: 'no'.
  * 
- * @config &subdomainDocTemplateId=Template id of subdomain documents;text;
+ * @config &subdomainDocTemplateId=Template id of subdomain documents;text; &alwaysBuildFullUrl=Always build a full URL;list;yes,no;no
  * @event OnMakeDocUrl
  * 
  * @copyright 2015 DivanDesign {@link http://www.DivanDesign.biz }
@@ -19,6 +20,8 @@
 if (!isset($subdomainDocTemplateId) || !is_numeric($subdomainDocTemplateId)){return;}
 
 if ($modx->Event->name == 'OnMakeDocUrl'){
+	$alwaysBuildFullUrl = isset($alwaysBuildFullUrl) && $alwaysBuildFullUrl == 'yes' ? true : false;
+	
 	//Подключаем modx.ddTools
 	require_once $modx->getConfig('base_path').'assets/snippets/ddTools/modx.ddtools.class.php';
 	
@@ -56,8 +59,12 @@ if ($modx->Event->name == 'OnMakeDocUrl'){
 		$url['path'] = substr($url['path'], strlen('/'.$buildSubdomainAlias));
 	}
 	
-	//Если мы сейчас не на поддомене, на страницу которого строим ссылку, то нужен полный URL (внешняя ссылка)
-	if ($currentSubdomainAlias != $buildSubdomainAlias){
+	if (
+		//Если нужен всегда полный URL
+		$alwaysBuildFullUrl ||
+		//Если мы сейчас не на поддомене, на страницу которого строим ссылку, то нужен полный URL (внешняя ссылка)
+		$currentSubdomainAlias != $buildSubdomainAlias
+	){
 		//Добавляем схему при необходимости
 		if (!isset($url['scheme'])){$url['scheme'] = !isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == 'off' ? 'http' : 'https';}
 		//Добавляем хост при необходимости
