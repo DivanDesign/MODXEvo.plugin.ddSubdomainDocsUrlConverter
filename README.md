@@ -1,4 +1,4 @@
-# ddDocsSubdomainsUrlConverter
+# ddSubdomainDocsUrlConverter
 При генерации URL средставами MODX изменяет их таким образом, чтобы корневая папка с необходимым шаблоном становилась поддоменом.
 
 ## Requires
@@ -9,11 +9,11 @@
 * OnMakeDocUrl
 
 ## Config
-`&subdomainDocTemplateId=Template id of subdomain documents;text;`
+`&subdomainDocsTemplateId=Template id of subdomain documents;text;`
 
 ## Parameters description
-* $subdomainDocTemplateId {integer} — ID шаблона корневой папки-поддомена.
-* [$alwaysBuildFullUrl='no'] {'yes'|'no'} — Конвертировать все URL в абсолютные.
+* $subdomainDocsTemplateId {integer} — ID шаблона корневой папки-поддомена.
+* [$alwaysBuildAbsoluteUrl='no'] {'yes'|'no'} — Конвертировать все URL в абсолютные.
 
 ## Usage
 Пусть структура документов будет такая:
@@ -33,7 +33,7 @@
 
 Для документов «De (4)» и «Fr (5)» понадобится отдельный шаблон, назовём его «Subdomain template» (пусть его ID = «4»).
 
-_Параметр плагина `$subdomainDocTemplateId`, соответственно, выставляем в `4`._
+_Параметр плагина `$subdomainDocsTemplateId`, соответственно, выставляем в `4`._
 
 ### Когда находимся на одной из страниц основного домена «domain.com»
 Адреса страниц при генерации будут преобразованы следующим образом:

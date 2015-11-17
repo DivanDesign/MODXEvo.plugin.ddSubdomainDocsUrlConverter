@@ -1,6 +1,6 @@
 //<?php
 /**
- * ddDocsSubdomainsUrlConverter.php
+ * ddSubdomainDocsUrlConverter.php
  * @version 1.0 (2015-02-22)
  * 
  * @desc При генерации URL средставами MODX изменяет их таким образом, чтобы корневая папка с необходимым шаблоном становилась поддоменом («http://domain.com/de/about» → «http://de.domain.com/about» или просто «about», если находимся в рамках поддомена).
@@ -8,19 +8,19 @@
  * @uses MODXEvo >= 1.0.15_3595d8b791d0dc31ce7c08876c0c0c0a342c73fe.
  * @uses The library modx.ddTools 0.14.2.
  * 
- * @param $subdomainDocTemplateId {integer} — ID шаблона корневой папки-поддомена. @required
- * @param $alwaysBuildFullUrl {'yes'|'no'} — Конвертировать все URL в абсолютные. Default: 'no'.
+ * @param $subdomainDocsTemplateId {integer} — ID шаблона корневой папки-поддомена. @required
+ * @param $alwaysBuildAbsoluteUrl {'yes'|'no'} — Конвертировать все URL в абсолютные. Default: 'no'.
  * 
- * @config &subdomainDocTemplateId=Template id of subdomain documents;text; &alwaysBuildFullUrl=Always build a full URL;list;yes,no;no
+ * @config &subdomainDocsTemplateId=Template id of subdomain documents;text; &alwaysBuildAbsoluteUrl=Always build a full URL;list;yes,no;no
  * @event OnMakeDocUrl
  * 
  * @copyright 2015 DivanDesign {@link http://www.DivanDesign.biz }
  */
 
-if (!isset($subdomainDocTemplateId) || !is_numeric($subdomainDocTemplateId)){return;}
+if (!isset($subdomainDocsTemplateId) || !is_numeric($subdomainDocsTemplateId)){return;}
 
 if ($modx->Event->name == 'OnMakeDocUrl'){
-	$alwaysBuildFullUrl = isset($alwaysBuildFullUrl) && $alwaysBuildFullUrl == 'yes' ? true : false;
+	$alwaysBuildAbsoluteUrl = isset($alwaysBuildAbsoluteUrl) && $alwaysBuildAbsoluteUrl == 'yes' ? true : false;
 	
 	//Подключаем modx.ddTools
 	require_once $modx->getConfig('base_path').'assets/snippets/ddTools/modx.ddtools.class.php';
@@ -52,7 +52,7 @@ if ($modx->Event->name == 'OnMakeDocUrl'){
 	$buildSubdomainAlias = 'www';
 	
 	//Если ссылка формируется на одну из страниц в папке-поддомена
-	if ($rootParent['template'] == $subdomainDocTemplateId){
+	if ($rootParent['template'] == $subdomainDocsTemplateId){
 		$buildSubdomainAlias = $rootParent['alias'];
 		
 		//Убираем псевдоним папки-поддомена из начала пути
@@ -61,7 +61,7 @@ if ($modx->Event->name == 'OnMakeDocUrl'){
 	
 	if (
 		//Если нужен всегда полный URL
-		$alwaysBuildFullUrl ||
+		$alwaysBuildAbsoluteUrl ||
 		//Если мы сейчас не на поддомене, на страницу которого строим ссылку, то нужен полный URL (внешняя ссылка)
 		$currentSubdomainAlias != $buildSubdomainAlias
 	){
