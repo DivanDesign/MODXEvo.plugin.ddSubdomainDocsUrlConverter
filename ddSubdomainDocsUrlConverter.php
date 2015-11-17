@@ -1,7 +1,7 @@
 //<?php
 /**
  * ddSubdomainDocsUrlConverter.php
- * @version 1.0 (2015-02-22)
+ * @version 1.1 (2015-11-17)
  * 
  * @desc При генерации URL средставами MODX изменяет их таким образом, чтобы корневая папка с необходимым шаблоном становилась поддоменом («http://domain.com/de/about» → «http://de.domain.com/about» или просто «about», если находимся в рамках поддомена).
  * 
@@ -11,7 +11,7 @@
  * @param $subdomainDocsTemplateId {integer} — ID шаблона корневой папки-поддомена. @required
  * @param $alwaysBuildAbsoluteUrl {'yes'|'no'} — Конвертировать все URL в абсолютные. Default: 'no'.
  * 
- * @config &subdomainDocsTemplateId=Template id of subdomain documents;text; &alwaysBuildAbsoluteUrl=Always build a full URL;list;yes,no;no
+ * @config &subdomainDocsTemplateId=Template id of subdomain documents;text; &alwaysBuildAbsoluteUrl=Always build an absolute URL;list;yes,no;no
  * @event OnMakeDocUrl
  * 
  * @copyright 2015 DivanDesign {@link http://www.DivanDesign.biz }

@@ -9,7 +9,7 @@
 * OnMakeDocUrl
 
 ## Config
-`&subdomainDocsTemplateId=Template id of subdomain documents;text;`
+`&subdomainDocsTemplateId=Template id of subdomain documents;text; &alwaysBuildAbsoluteUrl=Always build an absolute URL;list;yes,no;no`
 
 ## Parameters description
 * $subdomainDocsTemplateId {integer} — ID шаблона корневой папки-поддомена.
@@ -57,5 +57,11 @@ _Параметр плагина `$subdomainDocsTemplateId`, соответст�
 _Поддомен «www.domain.com» обрабатывается так же, как основной «domain.com»._
 
 ## Changelog
+### Version 1.1 (2015-11-17)
+* \+ Добавлена возможность конвертировать все URL в абсолютные (параметр «$alwaysBuildAbsoluteUrl»).
+* \* Плагин переименован в «ddSubdomainDocsUrlConverter».
+* \* Параметр «subdomainDocTemplateId» переименован в «subdomainDocsTemplateId».
+* \* Внимание! Нарушена обратная совместимость (но т. к. плагин ранее нигде не публиковался и не использовался, мажорная версия не будет присваиваться).
+
 ### Version 1.0 (2015-02-22)
 * \+ The first release.
