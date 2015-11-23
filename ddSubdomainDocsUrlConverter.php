@@ -10,8 +10,9 @@
  * 
  * @param $subdomainDocsTemplateId {integer} — ID шаблона корневой папки-поддомена. @required
  * @param $alwaysBuildAbsoluteUrl {'yes'|'no'} — Конвертировать все URL в абсолютные. Default: 'no'.
+ * @param $fullUrlDefaultSubdomain {string} - Поддоме по умолчанию для полных адресов. Default: ''.
  * 
- * @config &subdomainDocsTemplateId=Template id of subdomain documents;text; &alwaysBuildAbsoluteUrl=Always build an absolute URL;list;yes,no;no
+ * @config &subdomainDocsTemplateId=Template id of subdomain documents;text; &alwaysBuildAbsoluteUrl=Always build an absolute URL;list;yes,no;no &fullUrlDefaultSubdomain=Default subdomain for full URLs;text;www
  * @event OnMakeDocUrl
  * 
  * @copyright 2015 DivanDesign {@link http://www.DivanDesign.biz }
@@ -21,6 +22,7 @@ if (!isset($subdomainDocsTemplateId) || !is_numeric($subdomainDocsTemplateId)){r
 
 if ($modx->Event->name == 'OnMakeDocUrl'){
 	$alwaysBuildAbsoluteUrl = isset($alwaysBuildAbsoluteUrl) && $alwaysBuildAbsoluteUrl == 'yes' ? true : false;
+	$fullUrlDefaultSubdomain = isset($fullUrlDefaultSubdomain)? $fullUrlDefaultSubdomain: '';
 	
 	//Подключаем modx.ddTools
 	require_once $modx->getConfig('base_path').'assets/snippets/ddTools/modx.ddtools.class.php';
@@ -40,7 +42,7 @@ if ($modx->Event->name == 'OnMakeDocUrl'){
 	//Псевдоним текущего поддомена (для основного домена будет == 'www')
 	$currentSubdomainAlias = array_reverse(explode('.', $_SERVER['HTTP_HOST']));
 	//Если домена третьего уровня нет (мало ли), значит мы основном домене, иначе — на поддомене
-	$currentSubdomainAlias = !isset($currentSubdomainAlias[2]) ? 'www' : $currentSubdomainAlias[2];
+	$currentSubdomainAlias = !isset($currentSubdomainAlias[2]) ? $fullUrlDefaultSubdomain : $currentSubdomainAlias[2];
 	
 	//Разберём url текущего документа
 	$url = parse_url($modx->Event->params['url']);
@@ -49,7 +51,7 @@ if ($modx->Event->name == 'OnMakeDocUrl'){
 	if (substr($url['path'], 0, 1) != '/'){$url['path'] = '/'.$url['path'];}
 	
 	//По умолчанию считаем, что строим ссылку на страницу без поддомена (ну, а какая разница?)
-	$buildSubdomainAlias = 'www';
+	$buildSubdomainAlias = $fullUrlDefaultSubdomain;
 	
 	//Если ссылка формируется на одну из страниц в папке-поддомена
 	if ($rootParent['template'] == $subdomainDocsTemplateId){
@@ -74,8 +76,15 @@ if ($modx->Event->name == 'OnMakeDocUrl'){
 		$url['host'] = array_reverse(explode('.', $url['host']));
 		//Нам нужны только 3 уровня доменов (ну мало ли)
 		$url['host'] = array_slice($url['host'], 0, 3);
-		//Доменом третьего уровня будет необходимый поддомен (как удобно, что у основного будет 'www')
-		$url['host'][2] = $buildSubdomainAlias;
+		
+		//Если смогли построить какой-то поддомен, то записываем его
+		if($buildSubdomainAlias !== ''){
+			$url['host'][2] = $buildSubdomainAlias;
+		}else{
+			//Если нет, то убираем элемент из массива, строим url без поддомена
+			unset($url['host'][2]);
+		}
+		
 		//Склеиваем обратно
 		$url['host'] = implode('.', array_reverse($url['host']));
 	}
