@@ -1,28 +1,35 @@
 //<?php
 /**
  * ddSubdomainDocsUrlConverter.php
- * @version 1.1 (2015-11-17)
+ * @version 1.2 (2016-07-28)
  * 
- * @desc При генерации URL средставами MODX изменяет их таким образом, чтобы корневая папка с необходимым шаблоном становилась поддоменом («http://domain.com/de/about» → «http://de.domain.com/about» или просто «about», если находимся в рамках поддомена).
+ * @desc When MODX makes urls a plugin modify them so that the root folder with necessary template has become a subdomain (“http://domain.com/de/about” → “http://de.domain.com/about” or just “about” in the “de” document and its descendants).
  * 
- * @uses MODXEvo >= 1.0.15_3595d8b791d0dc31ce7c08876c0c0c0a342c73fe.
+ * @uses MODXEvo >= 1.1.
  * @uses The library modx.ddTools 0.14.2.
  * 
- * @param $subdomainDocsTemplateId {integer} — ID шаблона корневой папки-поддомена. @required
- * @param $alwaysBuildAbsoluteUrl {'yes'|'no'} — Конвертировать все URL в абсолютные. Default: 'no'.
- * @param $fullUrlDefaultSubdomain {string} - Поддоме по умолчанию для полных адресов. Default: ''.
+ * @param $subdomainDocsTemplateId {integer} — Template ID of the root folder-subdomain. @required
+ * @param $alwaysBuildAbsoluteUrl {'yes'|'no'} — Convert all URLs to absolute. Default: 'no'.
+ * @param $fullUrlDefaultSubdomain {string} — Default subdomain for full URLs. Default: ''.
  * 
  * @config &subdomainDocsTemplateId=Template id of subdomain documents;text; &alwaysBuildAbsoluteUrl=Always build an absolute URL;list;yes,no;no &fullUrlDefaultSubdomain=Default subdomain for full URLs;text;www
  * @event OnMakeDocUrl
  * 
- * @copyright 2015 DivanDesign {@link http://www.DivanDesign.biz }
+ * @link http://code.divandesign.biz/modx/ddsubdomaindocsurlconverter/1.2
+ * 
+ * @copyright 2015–2016 DivanDesign {@link http://www.DivanDesign.biz }
  */
 
-if (!isset($subdomainDocsTemplateId) || !is_numeric($subdomainDocsTemplateId)){return;}
+if (
+	!isset($subdomainDocsTemplateId) ||
+	!is_numeric($subdomainDocsTemplateId)
+){
+	return;
+}
 
 if ($modx->Event->name == 'OnMakeDocUrl'){
 	$alwaysBuildAbsoluteUrl = isset($alwaysBuildAbsoluteUrl) && $alwaysBuildAbsoluteUrl == 'yes' ? true : false;
-	$fullUrlDefaultSubdomain = isset($fullUrlDefaultSubdomain)? $fullUrlDefaultSubdomain: '';
+	$fullUrlDefaultSubdomain = isset($fullUrlDefaultSubdomain) ? $fullUrlDefaultSubdomain : '';
 	
 	//Подключаем modx.ddTools
 	require_once $modx->getConfig('base_path').'assets/libs/ddTools/modx.ddtools.class.php';
