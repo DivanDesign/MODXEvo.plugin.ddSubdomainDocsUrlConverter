@@ -25,7 +25,7 @@ if ($modx->Event->name == 'OnMakeDocUrl'){
 	$fullUrlDefaultSubdomain = isset($fullUrlDefaultSubdomain)? $fullUrlDefaultSubdomain: '';
 	
 	//Подключаем modx.ddTools
-	require_once $modx->getConfig('base_path').'assets/snippets/ddTools/modx.ddtools.class.php';
+	require_once $modx->getConfig('base_path').'assets/libs/ddTools/modx.ddtools.class.php';
 	
 	//Получаем корневого родителя
 	$rootParent = $modx->getParentIds($modx->Event->params['id']);
